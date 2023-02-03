@@ -46,9 +46,12 @@ class HttpClient {
 
       return response;
     } on DioError catch (e) {
-      AppLogger.log("============> failed ${e.response}");
+      AppLogger.log("============> response data ${e.response?.data}");
+      AppLogger.log("============> message ${e.message}");
+      AppLogger.log("============> error ${e.error}");
+      AppLogger.log("============> type ${e.type}");
 
-      if (e.response != null && e.response?.data != null && e.response?.data['message'] != null) {
+      if (e.response != null && e.response?.data != null ) {
         throw Failure(e.response?.data['message']);
       } else {
         AppLogger.log("Error ================> $e");

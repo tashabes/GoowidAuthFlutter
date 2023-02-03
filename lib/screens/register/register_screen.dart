@@ -382,6 +382,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         isLoading = false;
       });
+      AppLogger.log("Error:  =====> $e");
       AppLogger.log(e.toString());
              scaffoldMessenger
             .showSnackBar(const SnackBar(content: Text("Something went wrong, try again later")));

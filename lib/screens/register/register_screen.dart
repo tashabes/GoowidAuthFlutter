@@ -350,7 +350,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       'mobilePhone': '"' + phone + '"',
       'passwordProfile': {
         "forceChangePasswordNextSignIn": false,
-        "password": '"' + password + '"',
+        "password": password,
       }
     };
     print(data.toString());

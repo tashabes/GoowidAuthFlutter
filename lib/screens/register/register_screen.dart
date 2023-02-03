@@ -372,15 +372,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
       }
     } on Failure catch (e) {
+       scaffoldMessenger
+            .showSnackBar(SnackBar(content: Text(e.errorMessage)));
       setState(() {
-        isLoading = true;
+        isLoading = false;
       });
-      AppLogger.log(e.errorMessage);
+      AppLogger.log("Error:  =====> ${e.errorMessage}");
     } catch (e) {
       setState(() {
-        isLoading = true;
+        isLoading = false;
       });
       AppLogger.log(e.toString());
+             scaffoldMessenger
+            .showSnackBar(const SnackBar(content: Text("Something went wrong, try again later")));
     }
   }
 

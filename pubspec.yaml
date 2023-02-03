@@ -52,8 +52,8 @@ dependencies:
   rive: ^0.9.1
   flutter_svg: ^1.1.6
   provider: ^6.0.5
-  http: ^0.13.5
-  flutter_flushbar: ^0.0.2  
+  flutter_flushbar: ^0.0.2 
+  dio: ^4.0.6 
 
 
 dev_dependencies:

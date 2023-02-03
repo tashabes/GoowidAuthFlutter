@@ -225,7 +225,7 @@ class _SignInState extends State<SignIn> {
   }
 
   login(email, password) async {
-    Map data = {'userName': email, 'password': '"' + password + '"'};
+    Map data = {'userName': email, 'password': password};
     print(data.toString());
     final response = await http.post(
       Uri.parse(LOGIN),

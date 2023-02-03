@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:goowid_auth/app/core/client/http_client.dart';
+import 'package:goowid_auth/app/core/failure/failure.dart';
+import 'package:goowid_auth/utils/app_logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../api/api.dart';
@@ -17,8 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String user;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late ScaffoldMessengerState scaffoldMessenger;
-  var reg = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  var reg = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
   double password_strength = 0;
 
@@ -103,8 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Form(
                         key: _formKey,
                         child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 45),
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 45),
                           child: Column(
                             children: <Widget>[
                               TextFormField(
@@ -114,11 +116,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 controller: _nameController,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black12)),
+                                      borderSide: BorderSide(color: Colors.black12)),
                                   hintText: "Name",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
+                                  hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
                                 ),
                                 onSaved: (val) {
                                   name = val!;
@@ -134,11 +134,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 controller: _phoneController,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black12)),
+                                      borderSide: BorderSide(color: Colors.black12)),
                                   hintText: "Phone Number",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
+                                  hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
                                 ),
                                 onSaved: (val) {
                                   phone = val!;
@@ -156,11 +154,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 autocorrect: false,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black12)),
+                                      borderSide: BorderSide(color: Colors.black12)),
                                   hintText: "Email",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
+                                  hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
                                 ),
                                 onSaved: (val) {
                                   email = val!;
@@ -179,11 +175,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 autocorrect: false,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black12)),
+                                      borderSide: BorderSide(color: Colors.black12)),
                                   hintText: "Password",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
+                                  hintStyle: TextStyle(color: Colors.black54, fontSize: 15),
                                 ),
                                 onChanged: (value) {
                                   _formKey.currentState!.validate();
@@ -227,8 +221,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Container(
                                     alignment: Alignment.center,
                                     width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 0),
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                                     height: 50,
                                     decoration: BoxDecoration(
                                       color: Color(0xFFF77D8E),
@@ -242,42 +236,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         }
                                         if (_nameController.text.isEmpty) {
                                           scaffoldMessenger.showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      "Please Enter Name")));
+                                              const SnackBar(content: Text("Please Enter Name")));
                                           return;
                                         }
-                                        if (!reg
-                                            .hasMatch(_emailController.text)) {
+                                        if (!reg.hasMatch(_emailController.text)) {
                                           scaffoldMessenger.showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      "Enter Valid Email")));
+                                              const SnackBar(content: Text("Enter Valid Email")));
                                           return;
                                         }
-                                        if (!(_emailController.text)
-                                            .contains(emailFormat)) {
-                                          scaffoldMessenger.showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      "Enter a Goowid.com email")));
+                                        if (!(_emailController.text).contains(emailFormat)) {
+                                          scaffoldMessenger.showSnackBar(const SnackBar(
+                                              content: Text("Enter a Goowid.com email")));
                                           return;
                                         }
 
                                         if (_passwordController.text.isEmpty ||
-                                            _passwordController.text.length <
-                                                6) {
-                                          scaffoldMessenger.showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      "Password should be min 6 characters")));
+                                            _passwordController.text.length < 6) {
+                                          scaffoldMessenger.showSnackBar(const SnackBar(
+                                              content:
+                                                  Text("Password should be min 6 characters")));
                                           return;
                                         }
-                                        signup(
-                                            _nameController.text,
-                                            _phoneController.text,
-                                            _emailController.text,
-                                            _passwordController.text);
+                                        signup(_nameController.text, _phoneController.text,
+                                            _emailController.text, _passwordController.text);
                                       },
                                       child: const Text("CREATE ACCOUNT",
                                           textAlign: TextAlign.center,
@@ -294,8 +275,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             child: Container(
                                                 height: 26,
                                                 width: 26,
-                                                child:
-                                                    const CircularProgressIndicator(
+                                                child: const CircularProgressIndicator(
                                                   backgroundColor: Colors.green,
                                                 )))
                                         : Container(),
@@ -333,40 +313,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   signup(name, phone, email, password) async {
+    print("Calling");
+
     setState(() {
       isLoading = true;
     });
-    print("Calling");
+    try {
+      Map data = {
+        'displayName': name,
+        'firstName': name,
+        'surname': 'test',
+        'givenName': 'test',
+        'mailNickname': name,
+        'streetAddress': 'test',
+        'accountEnabled': true,
+        'email': email,
+        'mobilePhone': '"' + phone + '"',
+        'passwordProfile': {
+          "forceChangePasswordNextSignIn": false,
+          "password": password,
+        }
+      };
+      print(data.toString());
+      HttpClient httpClient = HttpClient();
+      Response? res = await httpClient.post(
+        REGISTRATION,
+        data,
+        headers: {
+          "Ocp-Apim-Subscription-Key": "7814fdc73dbe4abeb94bcc2d14956272",
+          "Content-Type": "application/json"
+        },
+      );
+      setState(() {
+        isLoading = false;
+      });
+      Map<String, dynamic> resposne = res?.data;
 
-    Map data = {
-      'displayName': name,
-      'firstName': name,
-      'surname': 'test',
-      'givenName': 'test',
-      'mailNickname': name,
-      'streetAddress': 'test',
-      'accountEnabled': true,
-      'email': email,
-      'mobilePhone': '"' + phone + '"',
-      'passwordProfile': {
-        "forceChangePasswordNextSignIn": false,
-        "password": password,
-      }
-    };
-    print(data.toString());
-    final response = await http.post(
-      Uri.parse(REGISTRATION),
-      headers: {
-        "Ocp-Apim-Subscription-Key": "7814fdc73dbe4abeb94bcc2d14956272",
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode(data),
-    );
-    setState(() {
-      isLoading = false;
-    });
-    if (response.statusCode == 200) {
-      Map<String, dynamic> resposne = jsonDecode(response.body);
+      AppLogger.log("This is the result: ======> ${res?.data}");
+
       if (resposne['displayName'] != null) {
         //return user;
         // User user = resposne['user'];
@@ -380,25 +364,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
             resposne['mobilePhone'],
             resposne['userPrincipalName'],
             resposne['id']);
-        scaffoldMessenger.showSnackBar(
-            SnackBar(content: Text("Welcome ${resposne['displayName']}")));
+        scaffoldMessenger
+            .showSnackBar(SnackBar(content: Text("Welcome ${resposne['displayName']}")));
         Navigator.pushReplacementNamed(context, "/signin");
+        setState(() {
+          isLoading = false;
+        });
       }
-    } else {
-      scaffoldMessenger.showSnackBar(SnackBar(
-          content: Text("Please try again!" + response.statusCode.toString())));
+    } on Failure catch (e) {
+      setState(() {
+        isLoading = true;
+      });
+      AppLogger.log(e.errorMessage);
+    } catch (e) {
+      setState(() {
+        isLoading = true;
+      });
+      AppLogger.log(e.toString());
     }
   }
 
-  savePref(
-      int value,
-      String displayName,
-      String givenName,
-      String surname,
-      String userPrincipalName,
-      String mobileNumber,
-      String email,
-      String id) async {
+  savePref(int value, String displayName, String givenName, String surname,
+      String userPrincipalName, String mobileNumber, String email, String id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     preferences.setInt("value", value);

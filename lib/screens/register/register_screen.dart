@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:goowid_auth/app/core/client/http_client.dart';
 import 'package:goowid_auth/app/core/failure/failure.dart';
+import 'package:goowid_auth/utils/app_flushbar.dart';
 import 'package:goowid_auth/utils/app_logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -364,16 +365,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             resposne['mobilePhone'],
             resposne['userPrincipalName'],
             resposne['id']);
-        scaffoldMessenger
-            .showSnackBar(SnackBar(content: Text("Welcome ${resposne['displayName']}")));
+       
         Navigator.pushReplacementNamed(context, "/signin");
+         GoodWidFlushBar.showSuccess(message: "Welcome ${resposne['displayName']}", context: context);
         setState(() {
           isLoading = false;
         });
       }
     } on Failure catch (e) {
-       scaffoldMessenger
-            .showSnackBar(SnackBar(content: Text(e.errorMessage)));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(e.errorMessage)));
+       GoodWidFlushBar.showError(message: e.errorMessage, context: context);
       setState(() {
         isLoading = false;
       });
@@ -384,8 +385,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       });
       AppLogger.log("Error:  =====> $e");
       AppLogger.log(e.toString());
-             scaffoldMessenger
-            .showSnackBar(const SnackBar(content: Text("Something went wrong, try again later")));
+      GoodWidFlushBar.showError(message: "Something went wrong, try again later", context: context);
     }
   }
 

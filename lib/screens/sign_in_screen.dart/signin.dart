@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:goowid_auth/utils/app_flushbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../api/api.dart';
@@ -250,14 +251,13 @@ class _SignInState extends State<SignIn> {
             resposne['mobilePhone'],
             resposne['userPrincipalName'],
             resposne['id']);
-        scaffoldMessenger.showSnackBar(
-            SnackBar(content: Text("Welcome ${resposne['displayName']}")));
 
         Navigator.pushReplacementNamed(context, "/entrypoint");
+        GoodWidFlushBar.showSuccess(message: "Welcome ${resposne['displayName']}", context: context);
       }
     } else {
-      scaffoldMessenger.showSnackBar(
-          SnackBar(content: Text("Your email or password are incorrect")));
+      GoodWidFlushBar.showError(message: "Your email or password are incorrect", context: context);
+     
     }
   }
 
